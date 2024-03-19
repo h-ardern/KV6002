@@ -1,20 +1,17 @@
 <?php
+/**
+ * 
+ * @author Patrick Shaw
+ */
 
 namespace App\EndpointControllers;
 
-
 class Token extends Endpoint
 {
-    /**
-     * @var string SQL query to fetch user id and password based on username.
-     */
-    private $sql = "SELECT id, password FROM account WHERE username = :username";
-
-
+    private $sql = "SELECT id, password, usertypeID, genderID FROM account WHERE username = :username";
     private $sqlParams = [];
 
     public function __construct() {
-
         switch(\App\Request::method()) 
         {
             case 'GET':
@@ -40,7 +37,7 @@ class Token extends Endpoint
                     throw new \App\ClientError(401);
                 }
 
-                $token = $this->generateJWT($data[0]['id']);        
+                $token = $this->generateJWT($data[0]['id'], $data[0]['usertypeID'], $data[0]['genderID']);        
                 $data = ['token' => $token];
  
                 parent::__construct($data);
@@ -51,20 +48,20 @@ class Token extends Endpoint
         }
     }
 
-    private function generateJWT($id) {
- 
+    private function generateJWT($id, $usertypeID, $genderID) {
         $secretKey = SECRET;
 
         $payload = [
             'sub' => $id,
-            'exp' => strtotime('+30 mins', time()),
+            'usertypeID' => $usertypeID,
+            'genderID' => $genderID, 
+            'exp' => strtotime('+1 hour', time()),
             'iat' => time(),
             'iss' => $_SERVER['HTTP_HOST']
-            ];
+        ];
 
         $jwt = \FIREBASE\JWT\JWT::encode($payload, $secretKey, 'HS256');
-  
+
         return $jwt;
     }
-
 }

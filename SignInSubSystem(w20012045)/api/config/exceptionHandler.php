@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * 
+ * @author Patrick Shaw
+ */
 function exceptionHandler($e) {
    http_response_code(500);
    $output['message'] = "Internal Server Error";

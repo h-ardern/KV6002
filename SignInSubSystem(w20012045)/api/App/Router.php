@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * 
+ * @author Patrick Shaw
+ */
 namespace App;
 
 abstract class Router
@@ -25,6 +28,10 @@ abstract class Router
                 case '/createaccount':
                 case '/createaccount/':
                     $endpoint = new \App\EndpointControllers\CreateAccount();
+                    break;
+                case '/country':
+                    case '/country/':
+                    $endpoint = new \App\EndpointControllers\Country();
                     break;               
                 default:
                     throw new ClientError(404);

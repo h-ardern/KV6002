@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * 
+ * @author Patrick Shaw
+ */
 function autoloader($className) {
     $filename = $className . ".php";
     $filename = str_replace('\\', DIRECTORY_SEPARATOR, $filename);

@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * 
+ * @author Patrick Shaw
+ */
 namespace App;
 
 class Response
@@ -17,7 +20,7 @@ class Response
     private function outputHeaders()
     {
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: https://w20012045.nuwebspace.co.uk');
+        header("Access-Control-Allow-Origin: http://localhost:5173");
         header('Access-Control-Allow-Headers: Authorization, Content-Type'); 
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE');
     }

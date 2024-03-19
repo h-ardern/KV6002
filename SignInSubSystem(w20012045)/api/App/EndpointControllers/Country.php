@@ -5,9 +5,13 @@
  */
 namespace App\EndpointControllers;
 
-class Developer extends Endpoint
+class Country extends Endpoint
 {
+    
     protected $allowedParams = [];
+  
+    private $sql = "SELECT country FROM country";
+
     private $sqlParams = [];
 
     public function __construct()
@@ -15,12 +19,13 @@ class Developer extends Endpoint
         switch(\App\Request::method()) {
             case 'GET':
                 $this->checkAllowedParams();
-                $data['id'] = "w20012045";
-                $data['name'] = "Patrick Shaw";
+                $dbConn = new \App\Database(USERS_DATABASE);
+                $data = $dbConn->executeSQL($this->sql, $this->sqlParams);
                 break;
             default:
-                throw new ClientError(405);
+                throw new \App\ClientError(405);
         }
-        parent::__construct($data);       
+        
+        parent::__construct($data);
     }
 }
