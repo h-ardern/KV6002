@@ -14,12 +14,12 @@ function SignUp() {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    usertypeID: 1,
+    confirmPassword: '',
     firstname: '',
     lastname: '',
     email: '',
     age: '',
-    genderID: 1,
+    genderID: '',
     addressNumber: '',
     addressStreet: '',
     addressCity: '',
@@ -31,9 +31,8 @@ function SignUp() {
   useEffect(() => {
     if (signedIn) {
       navigate('/');
-    }
+    } // if signed in sent back to home page
 
-    // Fetch the list of countries from the API
     fetch('https://w20012045.nuwebspace.co.uk/kv6002/signinsubsystem/api/country')
       .then((response) => response.json())
       .then((data) => {
@@ -42,14 +41,10 @@ function SignUp() {
       .catch((error) => {
         console.error('Error fetching countries:', error);
       });
-  }, [signedIn, navigate]);
+  }, [signedIn, navigate]); // fetches relevant countries for a dropdown box on the signUp form
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleUserTypeChange = (e) => {
-    setFormData({ ...formData, usertypeID: parseInt(e.target.value) });
   };
 
   const handleGenderChange = (e) => {
@@ -60,6 +55,7 @@ function SignUp() {
     const {
       username,
       password,
+      confirmPassword,
       firstname,
       lastname,
       email,
@@ -69,79 +65,90 @@ function SignUp() {
       addressCity,
       addressCountry,
     } = formData;
-  
+
     if (username.length < 5) {
-      toast.error('Username must be at least 5 characters long.');
+      toast.error('Username must be at least 5 characters long.'); //username validation
       return false;
     }
-  
+
     if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-      toast.error('Password must be at least 8 characters long and contain at least one digit and one letter.');
+      toast.error('Password must be at least 8 characters long and contain at least one digit and one letter.'); // password validation
       return false;
     }
-  
+
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match.'); // confirm password validation
+      return false;
+    }
+
     if (!/^[a-zA-Z]+$/.test(firstname) || !/^[a-zA-Z]+$/.test(lastname)) {
-      toast.error('First name and last name can only contain letters.');
+      toast.error('First name and last name can only contain letters.'); // firstname and last name validation
       return false;
     }
-  
+
     if (firstname.length > 25) {
-      toast.error('First name cannot exceed 25 characters.');
+      toast.error('First name cannot exceed 25 characters.'); // firstname validation
       return false;
     }
-  
+
     if (lastname.length > 25) {
-      toast.error('Last name cannot exceed 25 characters.');
+      toast.error('Last name cannot exceed 25 characters.'); // lastname validation
       return false;
     }
-  
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast.error('Please enter a valid email address.');
+      toast.error('Please enter a valid email address.'); // email validation
       return false;
     }
-  
+
     if (age < 18 || age > 120) {
-      toast.error('Age must be between 18 and 120.');
+      toast.error('Age must be between 18 and 120.'); // age validation
       return false;
     }
-  
+
+    if (!formData.genderID) {
+      toast.error('Please select a gender.'); // gender must be selected
+      return false;
+    }
+
     if (!/^\d+$/.test(addressNumber)) {
-      toast.error('Please enter a valid address number.');
+      toast.error('Please enter a valid address number.'); // address number validation (*1 = All inputs for the address are inputed in the same cell for the database,"1, street, village, Australia")
       return false;
     }
-  
+
     if (addressNumber.length > 10) {
-      toast.error('Address number cannot exceed 10 characters.');
+      toast.error('Address number cannot exceed 10 characters.'); // address number validation (*1)
       return false;
     }
-  
+
     if (!/^[a-zA-Z\s]+$/.test(addressStreet)) {
-      toast.error('Please enter a valid street name.');
+      toast.error('Please enter a valid street name.'); // address Street validation (*1)
       return false;
     }
-  
+
     if (addressStreet.length > 50) {
-      toast.error('Street name cannot exceed 50 characters.');
+      toast.error('Street name cannot exceed 50 characters.'); // address Street validation (*1)
       return false;
     }
-  
+
     if (!/^[a-zA-Z\s]+$/.test(addressCity)) {
-      toast.error('Please enter a valid city name.');
+      toast.error('Please enter a valid city name.'); // address City validation (*1)
       return false;
     }
-  
+
     if (addressCity.length > 50) {
-      toast.error('City name cannot exceed 50 characters.');
+      toast.error('City name cannot exceed 50 characters.'); // address City validation (*1)
       return false;
     }
-  
+
     if (!addressCountry) {
-      toast.error('Please select a country.');
+      toast.error('Please select a country.'); // address Country validation (*1)
       return false;
     }
-  
+
     return true;
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -155,7 +162,10 @@ function SignUp() {
     const requestData = {
       ...restFormData,
       address: addressString,
+      usertypeID: 2, // Set the usertypeID to 2 for researchers
     };
+
+    const encodedString = btoa(`${formData.username}:${formData.password}`);
 
     fetch('https://w20012045.nuwebspace.co.uk/kv6002/signinsubsystem/api/createaccount', {
       method: 'POST',
@@ -167,8 +177,6 @@ function SignUp() {
       .then((response) => {
         if (response.ok) {
           toast.success('Registration successful!');
-          // Automatically sign in the user after successful registration
-          const encodedString = btoa(`${formData.username}:${formData.password}`);
           return fetch('https://w20012045.nuwebspace.co.uk/kv6002/signinsubsystem/api/token', {
             method: 'GET',
             headers: new Headers({ Authorization: 'Basic ' + encodedString }),
@@ -185,8 +193,8 @@ function SignUp() {
       .then((data) => {
         const { token } = data;
         if (token) {
-          signIn(token);
           localStorage.setItem('token', token);
+          signIn(token);
           navigate('/');
         }
       })
@@ -225,18 +233,17 @@ function SignUp() {
               />
             </div>
             <div>
-              <label htmlFor="usertype">User Type:</label>
-              <select
-                id="usertype"
-                name="usertypeID"
-                value={formData.usertypeID}
-                onChange={handleUserTypeChange}
+              <label htmlFor="confirmPassword">Confirm Password:</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 required
-              >
-                <option value={1}>Participant</option>
-                <option value={2}>Client</option>
-              </select>
+              />
             </div>
+            <h2 className="text-2xl font-bold my-2">Details</h2>
             <div>
               <label htmlFor="firstname">First Name:</label>
               <input
@@ -290,13 +297,14 @@ function SignUp() {
                 onChange={handleGenderChange}
                 required
               >
-                <option value={1}>Female</option>
+                <option value="">Select gender</option>
                 <option value={2}>Male</option>
+                <option value={1}>Female</option>
                 <option value={3}>Other</option>
               </select>
             </div>
+            <h2 className="text-2xl font-bold my-2">Address</h2>
             <div>
-              <h3>Address</h3>
               <div>
                 <label htmlFor="addressNumber">House/Flat Number:</label>
                 <input
