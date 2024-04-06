@@ -1,22 +1,27 @@
 import React, { createContext, useContext, useReducer } from "react";
-
 /**
  * 
  * @author Patrick Shaw
-*/
-
+ */
 export const signInOutAction = "SIGN_INOUT";
 export const setUserIdAction = "SET_USER_ID";
 export const setUserTypeAction = "SET_USER_TYPE";
 export const setGenderAction = "SET_GENDER";
-export const setInterestAction = "SET_INTEREST_ID";
+export const setInterestsAction = "SET_INTERESTS";
+export const setUserDataAction = "SET_USER_DATA";
 
 const initialState = {
   signedIn: false,
   userId: null,
   userType: null,
   gender: null,
-  interest: null,
+  interests: "",
+  firstName: "",
+  lastName: "",
+  age: null,
+  username: "",
+  email: "",
+  address: "",
 };
 
 const reducer = (state, action) => {
@@ -29,8 +34,19 @@ const reducer = (state, action) => {
       return { ...state, userType: action.payload };
     case setGenderAction:
       return { ...state, gender: action.payload };
-    case setInterestAction:
-      return { ...state, interest: action.payload };
+    case setInterestsAction:
+      return { ...state, interests: action.payload };
+    case setUserDataAction:
+      const { firstname, lastname, age, username, email, address } = action.payload;
+      return {
+        ...state,
+        firstName: firstname,
+        lastName: lastname,
+        age: age,
+        username: username,
+        email: email,
+        address: address,
+      };
     default:
       return state;
   }
@@ -41,38 +57,80 @@ const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const parseUserTypeAndGenderFromToken = (token) => {
+  const parseDataFromToken = (token) => {
     if (token) {
       const payload = JSON.parse(atob(token.split(".")[1]));
       const userId = payload.sub;
       const usertypeID = payload.usertypeID;
       const genderID = payload.genderID;
-      const interestID = payload.interestID;
-      const userType = usertypeID === 2 ? "researcher" 
-      : usertypeID === 1 ? "participant" 
-      : null;
-      const gender = genderID === 1 ? "female" 
-      : genderID === 2 ? "male" 
-      : genderID === 3 ? "other" 
-      : null;
-      const interest = interestID === 1 ? "Enviromental" 
-      : interestID === 2 ? "Technology" 
-      : interestID === 3 ? "Psychology and Neuroscience" 
-      : interestID === 4 ? "Work and Education" 
-      : interestID === 5 ? "Health and Medicine" 
-      : null;
-      return { userId, userType, gender, interest };
+      const userType = usertypeID === 2 ? "researcher" : usertypeID === 1 ? "participant" : null;
+      const gender = genderID === 1 ? "female" : genderID === 2 ? "male" : genderID === 3 ? "other" : null;
+      return { userId, userType, gender };
     }
-    return { userId: null, userType: null, gender: null, interest: null };
+    return { userId: null, userType: null, gender: null };
+  };
+
+  const fetchUserInterests = (userId, token) => {
+    fetch("https://w20012045.nuwebspace.co.uk/kv6002/signinsubsystem/api/interests", {
+      method: 'GET',
+      headers: new Headers({
+        "Authorization": "Bearer " + token
+      }),
+    })
+      .then(response => {
+        return response.status === 200 ? response.json() : [];
+      })
+      .then(data => {
+        const interestIDs = data.map((interest) => interest.interestID);
+        const interestsString = interestIDs.map((id) => {
+          switch (id) {
+            case 1:
+              return "Environmental";
+            case 2:
+              return "Technology";
+            case 3:
+              return "Psychology and Neuroscience";
+            case 4:
+              return "Work and Education";
+            case 5:
+              return "Health and Medicine";
+            default:
+              return "";
+          }
+        }).join(", ");
+        dispatch({ type: setInterestsAction, payload: interestsString });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
+
+  const fetchUserData = (userId, token) => {
+    fetch("https://w20012045.nuwebspace.co.uk/kv6002/signinsubsystem/api/userdata", {
+      method: 'GET',
+      headers: new Headers({
+        "Authorization": "Bearer " + token
+      }),
+    })
+      .then(response => {
+        return response.status === 200 ? response.json() : {};
+      })
+      .then(data => {
+        dispatch({ type: setUserDataAction, payload: data[0] });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
   };
 
   const signIn = (token) => {
-    const { userId, userType, gender, interest } = parseUserTypeAndGenderFromToken(token);
+    const { userId, userType, gender } = parseDataFromToken(token);
     dispatch({ type: signInOutAction, payload: true });
     dispatch({ type: setUserIdAction, payload: userId });
     dispatch({ type: setUserTypeAction, payload: userType });
     dispatch({ type: setGenderAction, payload: gender });
-    dispatch({ type: setInterestAction, payload: interest });
+    fetchUserInterests(userId, token);
+    fetchUserData(userId, token);
   };
 
   const signOut = () => {
@@ -80,7 +138,8 @@ export const AuthContextProvider = ({ children }) => {
     dispatch({ type: setUserIdAction, payload: null });
     dispatch({ type: setUserTypeAction, payload: null });
     dispatch({ type: setGenderAction, payload: null });
-    dispatch({ type: setInterestAction, payload: null });
+    dispatch({ type: setInterestsAction, payload: "" });
+    dispatch({ type: setUserDataAction, payload: {} });
   };
 
   return (
