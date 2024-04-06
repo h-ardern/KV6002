@@ -1,2 +1,9 @@
-# KV6002
-2023SEM2_KV6002BNN01 : Team Project and Professionalism
+To run program
+
+In the command line
+
+#1 Run: npm install
+
+This will install all dependencies
+
+#2 Run: npm run dev
