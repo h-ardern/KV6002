@@ -12,7 +12,7 @@ abstract class Request
     {
         $url = $_SERVER["REQUEST_URI"];
         $path = parse_url($url)['path'];
-        
+        // Adjust the replacement to match your actual base path, or remove it if unnecessary
         return str_replace("/kv6002/API", "", $path); 
     }
 

@@ -26,7 +26,7 @@ class Database {
         return true;
     }
 
-  
+    // Directly utilize executeSQL for executing queries, including SELECT statements
     public function executeQuery($sql, $params = []) {
         return $this->executeSQL($sql, $params);
     }
