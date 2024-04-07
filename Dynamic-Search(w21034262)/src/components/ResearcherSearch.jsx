@@ -74,17 +74,22 @@ const SearchParticipants = ({ state }) => {
 
   useEffect(() => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
-    const results = participantData.filter(
-      (participant) =>
-        participant.firstname.toLowerCase().includes(lowerCaseSearchTerm) ||
-        participant.lastname.toLowerCase().includes(lowerCaseSearchTerm)
-    );
-    setFilteredParticipants(results);
-  }, [searchTerm, participantData]);
+    const lowerCaseInterestSearch = interests.toLowerCase();
 
-  const handleParticipantClick = (participant) => {
-    setSelectedParticipant(participant);
-  };
+    const results = participantData.filter((participant) => {
+      const matchesName = lowerCaseSearchTerm
+        ? participant.firstname.toLowerCase().includes(lowerCaseSearchTerm) ||
+          participant.lastname.toLowerCase().includes(lowerCaseSearchTerm)
+        : true;
+      const matchesInterest = lowerCaseInterestSearch
+        ? participant.interests.some((interest) =>
+            interest.interest.toLowerCase().includes(lowerCaseInterestSearch)
+          )
+        : true;
+      return matchesName && matchesInterest;
+    });
+    setFilteredParticipants(results);
+  }, [searchTerm, participantData, interests]);
 
   const handleCloseDialog = () => {
     setSelectedParticipant(null);
@@ -125,19 +130,5 @@ const SearchParticipants = ({ state }) => {
         </>
       )}
     </>
-  );
-};
-const ParticipantList = ({ participants }) => {
-  return (
-    <div className="space-y-4 mt-4">
-      {participants.map((participant) => (
-        <div key={participant.id} className="bg-white p-4 rounded-lg shadow">
-          <h2 className="font-semibold text-lg">
-            {participant.firstname} {participant.lastname}
-          </h2>
-          {/* Additional details can be added here */}
-        </div>
-      ))}
-    </div>
   );
 };

@@ -19,6 +19,7 @@ const Dialog = ({ show, onClose, project }) => {
     console.log("Applying for project:", project.project_name);
     onClose(); // Close the dialog after applying
   };
+
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center px-4">
       <div className="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full space-y-4">
@@ -39,6 +40,15 @@ const Dialog = ({ show, onClose, project }) => {
           <h3 className="font-semibold">Institution:</h3>
           <p className="text-gray-600">{project.institution_name}</p>
         </div>
+
+        {project.requirements && project.requirements.length > 0 && (
+          <div>
+            <h3 className="font-semibold">Requirements:</h3>
+            <ul className="list-disc list-inside space-y-1">
+              {<li className="text-gray-600">{project.requirements}</li>}
+            </ul>
+          </div>
+        )}
 
         <div>
           <h3 className="font-semibold">Status:</h3>

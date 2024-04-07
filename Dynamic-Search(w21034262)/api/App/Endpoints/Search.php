@@ -17,7 +17,7 @@ use \App\Request as Request;
 class Search extends EndpointBase
 {
     protected $allowedParams = ["university", "search_term", "status", "interest"];
-    private $sql = "SELECT project.id As project_id, project.name As project_name, 
+    private $sql = "SELECT project.id As project_id, project.name As project_name, requirements,
                     project.description As project_desc, status.description As status, 
                     institution.name As institution_name
                     FROM project
@@ -74,7 +74,7 @@ class Search extends EndpointBase
     return $data;
     }
     private function GetContributors($project_id, $dbConn){
-        $sql = "SELECT firstname As first_name, lastname As last_name,
+        $sql = "SELECT firstname As first_name, lastname As last_name, users.email As email,
                 Age As age, role.description As role
                 FROM project_participants
                 JOIN users on project_participants.userID = users.id
