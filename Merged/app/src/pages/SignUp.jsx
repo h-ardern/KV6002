@@ -208,7 +208,7 @@ function SignUp() {
     <>
       {!signedIn && (
         <div className="text-center my-4">
-          <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Not A Researcher? Participant Sign-Up Link Here.</a>
+          <a href="http://104.248.175.227:8000/" target="_blank" rel="noopener noreferrer">Not A Researcher? Participant Sign-Up Link Here.</a>
           <h2 className="text-2xl font-bold my-2">Sign Up</h2>
           <form onSubmit={handleSubmit}>
             <div>
