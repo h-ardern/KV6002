@@ -15,7 +15,7 @@ def home(request):
     form = PDFUploadForm()
     return render(request, 'cv_uploader/upload_form.html', {'form': form})
 
-
+# Process pdf file uploaded from form
 def upload_and_process_cv(request):
     if request.method == 'POST':
         form = PDFUploadForm(request.POST, request.FILES)
@@ -39,7 +39,7 @@ def upload_and_process_cv(request):
 
     return redirect('home')
 
-
+# Check database to see if email is already in use to avoid conflict
 def check_email(request):
     email = request.POST.get('email')
     database_dir = (str(settings.BASE_DIR) + '/cv_uploader/users.sqlite')
@@ -55,6 +55,7 @@ def check_email(request):
         conn.close()
         return JsonResponse({'email_exists': True})
 
+# Check database to see if username is already in use to avoid conflict
 def check_username(request):
     username = request.GET.get('username')
     database_dir = (str(settings.BASE_DIR) + '/cv_uploader/users.sqlite')

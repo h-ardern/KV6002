@@ -362,7 +362,7 @@
 
         $("#signup-modal").modal('show'); // Now show the signup modal
 
-        // If everything is valid, we proceed with the AJAX request.
+        // If everything is valid, proceed with the AJAX request.
         $.ajax({
             type: "POST",
             url: "{% url 'check_email' %}",
