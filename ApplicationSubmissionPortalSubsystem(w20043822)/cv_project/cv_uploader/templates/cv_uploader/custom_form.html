@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Form</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff; /* White background */
+            font-family: 'Arial', sans-serif;
+            margin-top: 60px; /* Space for header */
+        }
+
+        .header {
+            background-color: #1c2634;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1030;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .upload-card {
+            box-shadow: 0 4px 8px rgba(0,0,0,.05);
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .upload-card h2, .upload-card p {
+            text-align: center;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: #ffffff;
+            border-color: #007bff;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 1rem;
+            width: 100%;
+            box-shadow: none;
+            text-align: center;
+            display: block;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .funkyradio div {
+          clear: both;
+          overflow: hidden;
+        }
+
+        .funkyradio label {
+          width: 100%;
+          border-radius: 3px;
+          border: 1px solid #D1D3D4;
+          font-weight: normal;
+        }
+
+        .funkyradio input[type="checkbox"]:empty {
+          display: none;
+        }
+
+        .funkyradio input[type="checkbox"]:empty ~ label {
+          position: relative;
+          line-height: 2.5em;
+          text-indent: 3.25em;
+          margin-top: 2em;
+          cursor: pointer;
+          -webkit-user-select: none;
+             -moz-user-select: none;
+              -ms-user-select: none;
+                  user-select: none;
+        }
+
+        .funkyradio input[type="checkbox"]:empty ~ label:before {
+          position: absolute;
+          display: block;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          content: '';
+          width: 2.5em;
+          background: #D1D3D4;
+          border-radius: 3px 0 0 3px;
+        }
+
+        .funkyradio input[type="checkbox"]:hover:not(:checked) ~ label {
+          color: #888;
+        }
+
+        .funkyradio input[type="checkbox"]:hover:not(:checked) ~ label:before {
+          content: '\2714';
+          text-indent: .9em;
+          color: #C2C2C2;
+        }
+
+        .funkyradio input[type="checkbox"]:checked ~ label {
+          color: #484f56;
+        }
+
+        .funkyradio input[type="checkbox"]:checked ~ label:before {
+          content: '\2714';
+          text-indent: .9em;
+          color: #333;
+          background-color: #ccc;
+        }
+
+        .funkyradio input[type="checkbox"]:focus ~ label:before {
+          box-shadow: 0 0 0 3px #999;
+        }
+
+        .funkyradio-default input[type="checkbox"]:checked ~ label:before {
+          color: #d5d5d5;
+          background-color: #1c2634;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Research Application Portal</h1>
+    </div>
+    <div class="upload-card">
+        <div class="container">
+            <h2 class="mt-5 mb-4">Details</h2>
+            <!-- Pre-signup form -->
+            <div class="form-row">
+                <div class="col mb-3">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="John" value="{{ first_name }}" required>
+                </div>
+                <div class="col mb-3">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Doe" value="{{ last_name }}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email_verify" class="form-label">Email address</label>
+                <div class="input-group">
+                    <input type="email" class="form-control" id="email_verify" placeholder="name@example.com" value="{{ email }}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" class="form-control" id="address" name="address" placeholder="123 Main St" value="{{ address }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" class="form-control" id="age" name="age" placeholder="--" value="{{ age }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" name="gender" required>
+                    <option value="">Choose...</option>
+                    <option value="2">Male</option>
+                    <option value="1">Female</option>
+                    <option value="3">Other</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Interests:</label><br>
+                <div class="funkyradio">
+
+                    <div class="funkyradio-default">
+                        <input type="checkbox" name="interests" id="environmental" value="1" />
+                        <label for="environmental">Environmental</label>
+                    </div>
+
+                    <div class="funkyradio-default">
+                        <input type="checkbox" name="interests" id="technology" value="2" />
+                        <label for="technology">Technology</label>
+                    </div>
+
+                    <div class="funkyradio-default">
+                        <input type="checkbox" name="interests" id="psychology_and_neuroscience" value="3" />
+                        <label for="psychology_and_neuroscience">Psychology and Neuroscience</label>
+                    </div>
+
+                    <div class="funkyradio-default">
+                        <input type="checkbox" name="interests" id="work_and_education" value="4" />
+                        <label for="work_and_education">Work and Education</label>
+                    </div>
+
+                    <div class="funkyradio-default">
+                        <input type="checkbox" name="interests" id="health_and_medicine" value="5" />
+                        <label for="health_and_medicine">Health and Medicine</label>
+                    </div>
+                    </div>
+                </div>
+            <div class="mb-3">
+                <div class="input-group">
+                    <button class="btn btn-primary" type="button" id="email-check">Submit</button>
+                </div>
+            </div>
+            </div>
+
+            <!-- Signup Modal, hidden by default -->
+            <div id="signup-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Sign Up</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="{% url 'review_information' %}" enctype="multipart/form-data" id="signup-form">
+                                {% csrf_token %}
+                                <!-- HIDDEN FIELDS TO STORE PRE-SIGNUP AND SIGNUP DATA -->
+                                <input type="hidden" id="first_name_hidden" name="first_name">
+                                <input type="hidden" id="last_name_hidden" name="last_name">
+                                <input type="hidden" id="email_hidden" name="email">
+                                <input type="hidden" id="address_hidden" name="address">
+                                <input type="hidden" id="age_hidden" name="age">
+                                <input type="hidden" id="gender_hidden" name="gender">
+                                <input type="hidden" id="interest_hidden" name="interest">
+
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password1">Password</label>
+                                    <input type="password" class="form-control" id="password1" name="password1" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password2">Confirm Password</label>
+                                    <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm Password">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Checkbox Validation-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+    // Displays a message at the top of the page. Useful for errors or confirmations.
+    function displayAlert(message, type) {
+        const alertHTML = `<div class="alert ${type} alert-dismissible fade show" role="alert">
+                                ${message}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>`;
+        $('body').prepend(alertHTML); // This adds the alert at the top of the body
+    }
+
+    // Validation for username and passwords
+    function validateUsername(username) {
+        // Username must be at least 5 characters long
+        return username.length >= 5;
+    }
+
+    function validatePasswords(password1, password2) {
+        // Password must be at least 8 characters long and match each other
+        var regex = /(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%]).{8,}/; // Minimum eight characters, at least one letter and one number and one special character
+        return regex.test(password1) && password1 === password2;
+    }
+
+    // A simple function to check if the email looks like an email.
+    function validateEmail(email) {
+        var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+    // Validation for names (first and last), only allows letters and a few special characters.
+    function validateName(name) {
+        var regex = /^[a-zA-Z\s,'-]+$/;
+        return regex.test(name);
+    }
+
+    // A function to validate the address, allows numbers, letters, spaces, and some special characters.
+    function validateAddress(address) {
+        var regex = /^[a-zA-Z0-9\s,'-\.]+$/;
+        return regex.test(address);
+    }
+
+    // Checks the age is a number between 18 and 120 (inclusive).
+    function validateAge(age) {
+        return age >= 18 && age <= 120;
+    }
+
+    // Validates that a gender option has been selected
+    function validateGender(gender) {
+        return gender === "1" || gender === "2" || gender === "3";
+    }
+
+    // Checks that at least one interest is selected
+    function validateInterests(interests) {
+        return interests.length > 0;
+    }
+
+
+    // When the email check button is clicked, we validate the inputs before sending an AJAX request.
+    $("#email-check").on('click', function (event) {
+        event.preventDefault(); // Stop the form from submitting the normal way.
+
+        var email = $("#email_verify").val();
+        var firstName = $("#first_name").val();
+        var lastName = $("#last_name").val();
+        var address = $("#address").val();
+        var age = $("#age").val();
+        var gender = $("#gender").val();
+        var interests = $('input[name="interests"]:checked').map(function() { return this.value; }).get();
+        var csrftoken = $('[name=csrfmiddlewaretoken]').val(); // Needed for Django's CSRF protection
+
+        // Validation checks
+        if (!validateEmail(email) || !validateName(firstName) || !validateName(lastName) ||
+            !validateAddress(address) || !validateAge(age) || !validateGender(gender) ||
+            !validateInterests(interests)) {
+
+            displayAlert("Please make sure all fields are correctly filled and at least one interest is selected.", "alert-danger");
+            return; // Stop here if any validation fails
+        }
+
+       // Assuming the validations above are sufficient, proceed to transfer data to hidden fields
+        $("#first_name_hidden").val(firstName);
+        $("#last_name_hidden").val(lastName);
+        $("#email_hidden").val(email);
+        $("#address_hidden").val(address);
+        $("#age_hidden").val(age);
+        $("#gender_hidden").val(gender);
+        // For interests, since it's an array, join them with a comma or another separator if needed
+        $("#interest_hidden").val(interests.join(","));
+
+        $("#signup-modal").modal('show'); // Now show the signup modal
+
+        // If everything is valid, we proceed with the AJAX request.
+        $.ajax({
+            type: "POST",
+            url: "{% url 'check_email' %}",
+            data: {
+                'email': email,
+                'firstName': firstName,
+                'lastName': lastName,
+                'address': address,
+                'age': age,
+                'gender': gender,
+                'interests': interests.join(",")
+            },
+            headers: {"X-CSRFToken": csrftoken},
+            success: function (response) {
+                if (response.email_exists) {
+                    displayAlert("An account with this email already exists.", "alert-warning");
+                } else {
+                    $("#signup-modal").modal('show'); // Everything's good, show the modal.
+                }
+            }
+        });
+    });;
+
+            // Triggered when the sign-up form is submitted.
+            $("#signup-form").on('submit', function(e) {
+                e.preventDefault(); // Prevent the default form submission behavior.
+
+                // Checking if passwords match before submitting form.
+                var username = $("#username").val();
+                var password1 = $("#password1").val();
+                var password2 = $("#password2").val();
+                if (password1 !== password2) {
+                    alert("Passwords do not match."); // Alert if passwords don't match.
+                    return; // Stop form submission.
+                }
+                // Validating the collected data
+                if (!validateUsername(username)) {
+                    alert("Username must be at least 5 characters long.");
+                    return; // Stop here if validation fails
+                }
+
+                if (!validatePasswords(password1, password2)) {
+                    alert("Passwords must be at least 8 characters long and contain at least one letter and one number and a special character. Both passwords must match.");
+                    return; // Stop here if validation fails
+                }
+                // If all validations pass, serialize form data for submission.
+                var formData = $(this).serialize();
+
+                // AJAX request for sign-up.
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'review_information' %}", // Django URL pattern for sign-up.
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // Notify the user of successful sign-up.
+                            alert("Signup successful!");
+                            window.location.href = 'https://w20012045.nuwebspace.co.uk/kv6002/merged/app/';
+                        } else {
+                            // Notify the user of failure to sign-up.
+                            console.error("Signup failed:", response.error);
+                            alert('Application Failed , Please Try Again')
+                            window.location.reload()
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Handle AJAX errors here.
+                        console.error("Error during signup:", textStatus, errorThrown);
+                    }
+                });
+            });
+
+            // Triggered when the username input field loses focus.
+            $("#username").on('blur', function() {
+                var username = $(this).val(); // Get the username from the input field.
+                console.log(username)
+                if (username) { // Check if the username field is not empty.
+                    // AJAX request for checking username availability.
+                    $.ajax({
+                        type: "GET",
+                        url: "{% url 'check_username' %}", // Django URL pattern for checking username.
+                        data: { 'username': username },
+                        success: function(data) {
+                            if (data.username_exists) {
+                                // Notify the user if the username is already taken.
+                                alert("Username is already taken.");
+                            } else {
+                                // Notify the user if the username is available.
+                                alert("Username is available.");
+                            }
+                        },
+                        error: function() {
+                            // Handle errors in checking username availability.
+                            alert("Failed to check username availability.");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
