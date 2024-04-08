@@ -28,7 +28,9 @@ def extract_text_from_pdf(pdf_path):
     return text
 
 def extract_cv_info(cv_text):
-    client = OpenAI(api_key='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')
+    # The OpenAI API key has been removed due to OpenAIs very aggressive campaign to remove any public github repo which
+    # houses an api key . For this system to function an api key must be requisitioned.
+    client = OpenAI(api_key='Place Holder')
     response = client.chat.completions.create(model="gpt-3.5-turbo",
                                               messages=[
                                                   {"role": "system", "content": "You are a helpful assistant."},
