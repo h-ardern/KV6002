@@ -9,4 +9,5 @@ specific scenario's imposed by the technology used.
 SignInSubSystem(w20012045), written by Patrick Shaw
 contains read me detailing front end and backend sub system with endpoint links and 
 descriptions and deployed frontend link.
-Merged
+Merged, partially written and merged by Patrick Shaw
+contains read me detailing success and failings of merging sub systems.
